@@ -18,9 +18,9 @@
 
   <!-- Teapot shader -->
   <script id="vertex-shader-teapot" type="x-shader/x-vertex">
-      attribute vec3 position;
-      attribute vec3 normal;
-      attribute vec4 color;
+      attribute vec3 vertex_position;
+      attribute vec3 vertex_normal;
+      attribute vec4 vertex_color;
       
       uniform mat4 modelView;
       uniform mat4 perspectiveMatrix;
@@ -28,9 +28,9 @@
       varying vec4 fColor;
 
       void main() {
-          fColor = color;
+          fColor = vertex_color;
           
-          vec4 cameraPos = modelView * vec4(position, 1);
+          vec4 cameraPos = modelView * vec4(vertex_position, 1);
           gl_Position = perspectiveMatrix * cameraPos;
       }
   </script>
@@ -49,9 +49,10 @@
           }
       }
   </script>
-  <!-- Ground shader -->
+
+  <!-- Ground shaders -->
   <script id="vertex-shader-ground" type="x-shader/x-vertex">
-    attribute vec3 position;
+    attribute vec3 vertex_position;
     attribute vec2 texPosition;
     
     uniform mat4 modelView;
@@ -61,7 +62,7 @@
 
     void main() {
         fTexCoord = texPosition;
-        gl_Position = perspective * modelView * vec4(position, 1);
+        gl_Position = perspective * modelView * vec4(vertex_position, 1);
     }
 </script>
 
