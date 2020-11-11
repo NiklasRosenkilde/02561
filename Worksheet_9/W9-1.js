@@ -40,16 +40,16 @@ window.onload = function init() {
 
 
   // CLICK FUNCTIONS /////////////////////////////////////////////////////////
-  document.getElementById("moveTeapot").onchange = x => {
-      moveTeapot = bounceCheck.checked;
+  var bt_moveTeapot = document.getElementById("moveTeapot").onchange = x => {
+      moveTeapot = bt_moveTeapot.checked;
   };
 
-  document.getElementById("lookDown").onchange = x => {
-      lookDown = lookDownCheck.checked;
+  var bt_lookDown = document.getElementById("lookDown").onchange = x => {
+      lookDown = bt_lookDown.checked;
   };
 
-  document.getElementById("moveLight").onchange = x => {
-      moveLight = lightMoveCheck.checked;
+  var bt_moveLight = document.getElementById("moveLight").onchange = x => {
+      moveLight = bt_moveLight.checked;
   };
 
   // Projection shadow matrix
