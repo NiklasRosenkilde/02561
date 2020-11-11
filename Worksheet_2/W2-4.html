@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Worksheet 2-3</title>
+    <h2>Worksheet 2-4</h2>
+
+    <script type="text/javascript" src="W2-4.js"></script>
+    <script type="text/javascript" src="../utils/webgl-utils.js"></script>
+    <script type="text/javascript" src="../utils/initShaders.js"></script>
+    <script type="text/javascript" src="../utils/MV.js"></script>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+      precision mediump float;
+      attribute vec4 vertex_Position;
+      attribute vec4 vertex_Color;
+      varying vec4 fColor;
+    
+        void main()
+        {
+          gl_PointSize = 10.0;
+          gl_Position = vertex_Position;
+          fColor = vertex_Color;
+        }
+    
+      </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+      precision mediump float;
+      varying vec4 fColor;
+  
+      void main(){
+        gl_FragColor = fColor;
+      }
+      </script>
+    
+</head>
+
+<!DOCTYPE html>
+<html>
+<button id="pointsButton">Draw points</button>
+<button id="trianglesButton">Draw triangles</button>
+<button id="circlesButton">Draw circles</button>
+<div width=750 style="margin-top:10px">
+
+  <body>
+    <canvas id="c" height="512" width="512" style="float:left"></canvas>
+
+
+    <div width=100 style="float:left ; padding-left:10px;">
+
+      <select id="colorMenu">
+        <option value="0" selected>Black</option>
+        <option value="1">Red</option>
+        <option value="2">Yellow</option>
+        <option value="3">Green</option>
+        <option value="4">Blue</option>
+        <option value="5">Magenta</option>
+        <option value="6">Cyan</option>
+        <option value="7">Cornflower</option>
+        <option value="8">White</option>
+      </select>
+
+      <button id="clearButton">Clear canvas</button>
+    </div>
+
+</div>
+
+</body>
+
+</html>

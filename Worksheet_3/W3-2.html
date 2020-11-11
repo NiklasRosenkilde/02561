@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Worksheet 3-2</title>
+    <h2>Worksheet 3-2</h2>
+
+    
+    <script type="text/javascript" src="../utils/webgl-utils.js"></script>
+    <script type="text/javascript" src="../utils/initShaders.js"></script>
+    <script type="text/javascript" src="../utils/MV.js"></script>
+    <script type="text/javascript" src="W3-2.js"></script>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+      precision mediump float;
+      attribute vec4 vertex_Position;
+      attribute vec4 vertex_Color;
+      varying vec4 fColor;
+
+      uniform mat4 modelView;
+      uniform mat4 projection;    
+
+        void main()
+        {
+          gl_PointSize = 10.0;
+
+          gl_Position = projection * modelView *vertex_Position;
+
+          fColor = vertex_Color;
+        }
+    
+      </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+      precision mediump float;
+      varying vec4 fColor;
+  
+      void main(){
+        gl_FragColor = fColor;
+      }
+      </script>
+    
+</head>
+
+<!DOCTYPE html>
+<html>
+
+<div width=750 style="margin-top:10px">
+
+  <body>
+    <canvas id="c" height="512" width="512" style="float:left"></canvas>
+
+
+</div>
+
+</body>
+
+</html>
