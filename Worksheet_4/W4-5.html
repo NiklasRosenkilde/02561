@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Worksheet 4-5</title>
+    <h2>Worksheet 4-5</h2>
+
+    
+    <script type="text/javascript" src="../utils/webgl-utils.js"></script>
+    <script type="text/javascript" src="../utils/initShaders.js"></script>
+    <script type="text/javascript" src="../utils/MV.js"></script>
+    <script type="text/javascript" src="W4-5.js"></script>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+      precision mediump float;
+      attribute vec4 vertex_Position, vertex_Normal;
+      varying vec4 fColor;
+      varying vec3 N, L, E;
+      uniform mat4 modelView, projection;
+      
+      uniform vec4 lightPosition;
+
+
+        void main()
+        { 
+          vec3 pos = (modelView * vertex_Position).xyz;
+            
+          if(lightPosition.w == 0.0){ 
+            L = normalize(lightPosition.xyz);
+          }
+          else{
+            L = normalize( lightPosition.xyz - pos );
+          } 
+          
+          E = -normalize(pos); 
+          N = normalize( (modelView * vertex_Normal).xyz);
+      
+          gl_Position = projection * modelView * vertex_Position;
+
+        }
+    
+      </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+      precision mediump float;
+      uniform vec4 ambientProduct;
+      uniform vec4 diffuseProduct;
+      uniform vec4 specularProduct;
+      uniform float shininess;
+      varying vec3 N, L, E;
+      
+      void main()
+      {
+        vec4 fColor;
+
+        vec3 H = normalize(L + E);
+        vec4 ambient = ambientProduct;
+
+        float Kd = max(dot(L, N), 0.0);
+        vec4 diffuse = Kd * diffuseProduct;
+        
+        float Ks = pow(max(dot(N, H), 0.0), shininess);
+        vec4 specular = Ks * specularProduct;
+        if (dot(L, N) < 0.0) {
+          specular = vec4(0.0, 0.0, 0.0, 1.0);
+        }
+
+        fColor = ambient + diffuse + specular;
+        fColor.a = 1.0;
+        
+        gl_FragColor = fColor;
+      }
+      </script>
+    
+</head>
+<!DOCTYPE html>
+<html>
+
+<button id="incrementButton">Increment subdivisions</button>
+<button id="decrementButton">Decrement subdivisions</button>
+
+<body>
+  <div>
+    Ambient 0 <input id="slider_Ambient" type="range" min="0" max="1" step="0.1" value="0.5" /> 1 </div>
+
+  <div>
+    Diffuse 0 <input id="slider_Diffuse" type="range" min="0" max="1" step="0.1" value="0.5" /> 1 </div>
+
+  <div>
+    Specular 0 <input id="slider_Specular" type="range" min="0" max="1" step="0.1" value="0.5" /> 1 </div>
+
+  <div>
+    Shininess 0 <input id="slider_Alpha" type="range" min="0" max="500" step="1" value="50" /> 500 </div>
+
+  <div>
+    Emission 0 <input id="slider_Emission" type="range" min="0" max="1" step="0.1" value="0.5" /> 1 </div>
+
+  <div class="row" width=512 style="margin-top:10px">
+    <canvas id="c" height="512" width="512"></canvas>
+  </div>
+
+  <div class="row" style="width: 764px; margin-top:15px;">
+    <div class="text" >
+        <h4>Is Gouraud or Phong shading the best method for simulating highlight? </h4>
+        
+        Each of the two methods may considered 'best' depending on the purpose of the highlights simulation.
+        Gouraud shading, being the least computationally expensive method, may appear somewhat faceted, as it 
+        interpolates between the vertices, meaning highlights may  seem to jump between vertices - also, a 
+        spotlight highlight cannot appear e.g. in the middle of a polygon.
+        Phong shading may thus be considered more precise, as it interpolates across the polygons, thereby
+        enabling a more seamless shading even at low polygon counts. It does however require more computational
+        resources due to the interpolation of the surface normals. 
+
+    </div>
+</div>
+
+
+</body>
+
+</html>

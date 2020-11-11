@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Worksheet 7-3</title>
+    <h2>Worksheet 7-3</h2>
+
+    
+    <script type="text/javascript" src="../utils/webgl-utils.js"></script>
+    <script type="text/javascript" src="../utils/webgl-debug.js"></script>
+
+    <script type="text/javascript" src="../utils/initShaders.js"></script>
+    <script type="text/javascript" src="../utils/MV.js"></script>
+    <script type="text/javascript" src="W7-3.js"></script>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+      precision mediump float;
+        
+      attribute vec4 vertex_position;
+      varying vec3   vertex_textureCoords;
+      uniform mat4   modelViewMatrix, textureMatrix;
+      
+      void main() {
+          vertex_textureCoords = (textureMatrix * vertex_position).xyz;
+          gl_Position = modelViewMatrix * vertex_position;
+      }  
+    
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+      precision mediump float;
+
+      varying vec3 vertex_textureCoords;
+
+      uniform samplerCube texMap;
+      uniform vec3 viewVector;
+      uniform bool isReflective;
+
+      void main() {
+        vec3 temp_textureCoords = vertex_textureCoords;
+        if (isReflective) 
+        {
+          vec3 incident = vertex_textureCoords - viewVector;
+          vec3 reflected = reflect(incident, vertex_textureCoords);
+          temp_textureCoords = reflected;
+        }
+        gl_FragColor = textureCube(texMap, temp_textureCoords);
+      }
+      </script>
+    
+</head>
+
+<!DOCTYPE html>
+<html>
+  <body>
+
+    <div class="row" width=764 style="margin-top:10px">
+      <canvas id="c" height="764" width="764"></canvas>
+    </div>
+  
+    <div class="row" style="width: 764px; margin-top:15px;"></div>
+  
+
+  
+  </body>
+</html>

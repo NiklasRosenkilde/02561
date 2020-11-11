@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Worksheet 7-1</title>
+    <h2>Worksheet 7-1</h2>
+
+    
+    <script type="text/javascript" src="../utils/webgl-utils.js"></script>
+    <script type="text/javascript" src="../utils/initShaders.js"></script>
+    <script type="text/javascript" src="../utils/MV.js"></script>
+    <script type="text/javascript" src="W7-1.js"></script>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+      precision mediump float;
+      
+      varying vec3 R;
+      attribute vec4 vertex_Position;
+      attribute vec4 vertex_Normal;
+
+      uniform mat4 ModelView;
+      uniform vec3 theta;
+
+      void main(){
+        vec3 angles = radians(theta);
+        vec3 c = cos(angles);
+        vec3 s = sin(angles);
+
+        mat4 rx = mat4(
+              1.0, 0.0, 0.0, 0.0,
+              0.0, c.x, s.x, 0.0,
+              0.0, -s.x, c.x, 0.0,
+              0.0, 0.0, 0.0, 1.0);
+        mat4 ry = mat4(
+              c.y, 0.0, -s.y, 0.0,
+              0.0, 1.0, 0.0, 0.0,
+              s.y, 0.0, c.y, 0.0,
+              0.0, 0.0, 0.0, 1.0);
+        mat4 rz = mat4(
+              c.z, -s.z, 0.0, 0.0,
+              s.z, c.z, 0.0, 0.0,
+              0.0, 0.0, 1.0, 0.0,
+              0.0, 0.0, 0.0, 1.0);
+
+        mat4 ModelView = rz * ry * rx;
+        vec4 eyePos = -ModelView * vertex_Position;
+        vec4 N = ModelView * vertex_Normal;
+        R = reflect(eyePos.xyz, N.xyz);
+        gl_Position = ModelView * vertex_Position;
+
+      }
+      
+    
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+      precision mediump float;
+
+      varying vec3 R;
+      uniform samplerCube texMap;
+
+      void main() {
+        vec4 texColor = textureCube(texMap, R);
+        gl_FragColor = texColor;
+      }
+      </script>
+    
+</head>
+
+<!DOCTYPE html>
+<html>
+  <body>
+
+    <div class="row" width=764 style="margin-top:10px">
+      <canvas id="c" height="764" width="764"></canvas>
+    </div>
+  
+    <div class="row" style="width: 764px; margin-top:15px;"></div>
+  
+
+  
+  </body>
+</html>

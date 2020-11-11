@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Worksheet 4-3</title>
+    <h2>Worksheet 4-3</h2>
+
+    
+    <script type="text/javascript" src="../utils/webgl-utils.js"></script>
+    <script type="text/javascript" src="../utils/initShaders.js"></script>
+    <script type="text/javascript" src="../utils/MV.js"></script>
+    <script type="text/javascript" src="W6-3.js"></script>
+
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+      precision mediump float;
+      attribute vec4 vertex_Position;
+      //attribute vec4 vertex_Color;
+      attribute vec4 vertex_Normal;
+      varying vec4 fColor;
+
+      uniform mat4 modelView;
+      uniform mat4 projection;
+      
+      uniform vec4 ambientProduct, diffuseProduct, specularProduct;
+      uniform vec4 lightPosition;
+      uniform float shininess;
+      uniform float eye;
+
+        void main()
+        {
+
+          vec3 pos = (modelView * vertex_Position).xyz;
+          vec3 light = lightPosition.xyz;
+          vec3 L;
+          
+          if(lightPosition.w == 0.0){
+            L = normalize(light);
+          } 
+          else{
+            L = normalize( light - pos );
+          } 
+
+          vec3 E = normalize(-pos);
+          vec3 H = normalize(L + E);
+
+          // Transform vertex normal into eye coordinates
+          vec3 N = normalize( (modelView * vertex_Normal).xyz );
+
+          // Ambient
+          vec4 ambient = ambientProduct;
+
+          // Diffuse
+          float kd = max( dot(L, N) , 0.0 );
+          vec4 diffuse = kd * diffuseProduct;
+          
+          // Specular
+          float ks = pow( max( dot(N, H) , 0.0 ), shininess );
+          vec4 specular = ks * specularProduct;
+          if (dot(L, N) < 0.0) {
+            specular = vec4(0.0, 0.0, 0.0, 1.0);
+          }
+
+
+          fColor = ambient + diffuse + specular;
+          fColor.a = 1.0;
+          
+          gl_Position = projection * modelView * vertex_Position;
+        }
+    
+      </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+      precision mediump float;
+      varying vec4 fColor;
+  
+      void main(){
+        gl_FragColor = fColor;
+      }
+      </script>
+    
+</head>
+
+<!DOCTYPE html>
+<html>
+<button id="incrementButton">Increment subdivisions</button>
+<button id="decrementButton">Decrement subdivisions</button>
+<div width=750 style="margin-top:10px">
+
+  <body>
+    <canvas id="c" height="512" width="512" style="float:left"></canvas>
+
+
+</div>
+
+</body>
+
+</html>

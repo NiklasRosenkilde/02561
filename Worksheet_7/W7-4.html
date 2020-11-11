@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Worksheet 7-4</title>
+    <h2>Worksheet 7-4</h2>
+
+    
+    <script type="text/javascript" src="../utils/webgl-utils.js"></script>
+    <script type="text/javascript" src="../utils/webgl-debug.js"></script>
+
+    <script type="text/javascript" src="../utils/initShaders.js"></script>
+    <script type="text/javascript" src="../utils/MV.js"></script>
+    <script type="text/javascript" src="W7-4.js"></script>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+      precision mediump float;
+        
+      attribute vec4 vertex_position;
+      varying vec3   vertex_textureCoords;
+      uniform mat4   modelViewMatrix, textureMatrix;
+      
+      void main() {
+          vertex_textureCoords = (textureMatrix * vertex_position).xyz;
+          gl_Position = modelViewMatrix * vertex_position;
+      }  
+    
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+      precision mediump float;
+        
+      varying vec3 vertex_textureCoords;
+      
+      uniform samplerCube texMap;
+      uniform sampler2D samplerNormal;
+      uniform vec3 viewVector;
+      uniform bool isReflective;
+      
+      float atan2(float y, float x) 
+      {
+        return 2.0 * atan((length(vec2(x, y)) - x) / y);
+      }
+      
+      vec3 rotateToNormal(vec3 normal, vec3 v) 
+      {
+          float a = 1.0 / (1.0 + normal.z);
+          float b = -normal.x * normal.y * a;
+          return vec3(1.0 - normal.x * normal.x * a, b, -normal.x) * v.x
+              + vec3(b, 1.0 - normal.y * normal.y * a, -normal.y) * v.y
+              + normal * v.z;
+      }
+      
+      void main() {
+          float pi = 3.1415926;
+          vec3 normal             = vertex_textureCoords;
+
+          if (isReflective) 
+          {
+              float u = 0.5 + atan2(normal.z, - normal.x) / (2.0 * pi);
+              float v = 0.5 - (asin(normal.y) / pi);
+              vec3 normalTangent = texture2D(samplerNormal, vec2(u, v)).xyz * 2.0 - 1.0;
+
+              normal = rotateToNormal(normal, normalTangent);
+              vec3 incidentVector = vertex_textureCoords - viewVector;
+              normal = reflect(incidentVector, normal);
+
+              gl_FragColor = textureCube(texMap, normal);
+          } 
+          else 
+          {
+              gl_FragColor = textureCube(texMap, vertex_textureCoords);
+          }
+      }   
+      </script>
+    
+</head>
+
+<!DOCTYPE html>
+<html>
+  <body>
+
+    <div class="row" width=764 style="margin-top:10px">
+      <canvas id="c" height="764" width="764"></canvas>
+    </div>
+  
+    <div class="row" style="width: 764px; margin-top:15px;"></div>
+  
+
+  
+  </body>
+</html>

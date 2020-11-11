@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Worksheet 4-6</title>
+    <h2>Worksheet 4-6</h2>
+
+</head>
+<!DOCTYPE html>
+<html>
+
+<body>
+
+
+  <div class="row" style="width: 764px; margin-top:15px;">
+    <div class="text">
+      <h4>a) What is the difference between Phong shading and Phong lighting (the Phong reflection model)?</h4>
+
+        <i>Phong shading</i>
+        <br>
+        A shading model is used for determining how the shading of an object should be calculated and how an object should be rendered. 
+        For instance, the Phong shading model uses interpolation of the vertex normals to evaluate the color of every pixel individually, 
+        resulting in a smooth looking shape even when using coarse geometry.
+        This is different from e.g. flat shading, where the pixel color anywhere on a given face is the same. 
+        <br>
+        <br>
+        <i>Phong reflection model</i>
+        <br>
+        The Phong reflection model is a method for assessing the color of a given surface point, taking into account 
+        the surface point, a viewer and a light source. The model is able to determine the reflected light (thus the color) 
+        by assessing the interactions between the surface and the light source and supports ambient-, diffuse- and 
+        specular lighting components. 
+
+
+      <h4>b) What is the difference between flat shading, Gouraud shading, and Phong shading? List pros and cons of each.</h4>
+
+
+      <table style="width:100%">
+        <tr>
+          <th style="width: 94px; text-align: left;">Model</th>
+          <td style="width: 223px; text-align: left;">Flat</th>
+          <td style="width: 223px; text-align: left;">Gouraud</th>
+          <td style="width: 224px; text-align: left;">Phong</th>
+        </tr>
+        <tr style="vertical-align: top;">
+          <th style="padding-top: 10px;text-align: left;">Description</td>
+          <td style="padding-top: 10px;">
+            No interpolation. The color is the same for all pixels in a given polygon as the lighting is only evaluated 
+            once for each polygon. Gives a clear distinction of the model geometry with sharply defined edges.</td>
+            <td style="padding-top: 10px;">
+            The method evaluates the lighting at the vertices by using the vertex normals for the lighting calculations. 
+            The colors of each pixel in a polygon is then found by interpolation of the vertex colors. </td>
+          </td>
+          <td style="padding-top: 10px;">
+            All illumination calculations are carried out per-pixel by interpolation of normals from vertices.
+          </td>
+        </tr>
+        <tr style="vertical-align: top;">
+          <th style="padding-top: 10px;text-align: left;">Pros</td>
+          <td style="padding-top: 10px;">
+            <ul style="margin:0px;padding-left:15px;padding-top:0px;" >
+              <li>Highly effective in terms of computation.</li>
+
+            </ul>
+          </td>
+          <td style="padding-top: 10px;">
+            <ul style="margin:0px;padding-left:15px;padding-top:0px;" >
+              <li>Arguably handles highlights better than flat shading but still without being too computationally heavy.</li>
+              <li>Makes coarse geometry look somewhat smooth.</li>
+            </ul>
+          </td>
+          <td style="padding-top: 10px;">
+            <ul style="margin:0px;padding-left:15px;padding-top:0px;" >
+              <li>Most realistic looking of the three.</li>
+              <li>Handles specular lighting really well.</li>
+              <li>Makes coarse geometry look smooth.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr style="vertical-align: top;">
+          <th style="padding-top: 10px; text-align: left;">Cons</td>
+
+          <td style="padding-top: 10px;">
+            <ul style="margin:0px;padding-left:15px;padding-top:0px;" >
+              <li>Objects appears highly faceted (may be considered an advantage in certain case)</li>
+            </ul>
+          </td>
+          <td style="padding-top: 10px;">
+            <ul style="margin:0px;padding-left:15px;padding-top:0px;" >
+              <li>Cannot properly show reflections appearing in the middle of polygons.</li>
+              <li>Specular highlights may appear faceted on low-polygon objects.</li>
+            </ul>
+          </td>
+          <td style="padding-top: 10px;">
+            <ul style="margin:0px;padding-left:15px;padding-top:0px;" >
+              <li>Most computationally expensive of the three, requiring per-pixel illumination calculations.</li>
+            </ul>
+          </td>     
+
+
+      </table>
+
+      <h4>c) What is the difference between a directional light and a point light?</h4>
+      A <i>directional light</i> may be compared to a vector, meaning that it has no direct position
+      but is determined by a direction. As such, it emits parallel light throughout a given scene.
+      A <i>point light</i>, on the other hand, has a specified position and emits light equally in all directions outwards from the point source.
+
+
+      <h4>d) Does the eye position influence the shading of an object in any way?</h4>
+      
+      In the Phong illumination model, the calculation includes the vector spanning between each point and the viewer's eye.
+      Changing the position of the eye will therefore affect the resulting reflected light and thus pixel colour. 
+
+
+      <h4>e) What is the effect of setting the specular term to (0, 0, 0)?</h4>
+
+      An rgb color of (0,0,0) corresponds to black, meaning that all light is absorbed and therefore no specular highlight 
+      will be seen as no light is reflected.
+
+
+
+      <h4>f) What is the effect of increasing the shininess exponent (α)?</h4>
+      
+      Increasing the shininess exponent 'concentrates' the reflected light, i.e. materials with very spread out highlights have a low shininess 
+      exponent and increasing the exponent towards infinity creates a mirror effect.
+
+
+
+      <h4>g) In what coordinate space did you compute the lighting?</h4>
+
+      It was computed in eyecoordinate space.
+
+    </div>
+  </div>
+
+
+</body>
+
+</html>

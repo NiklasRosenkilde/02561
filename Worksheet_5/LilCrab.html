@@ -1,0 +1,57 @@
+<html>
+
+<head>
+    <!-- Headings w. style -->
+    <h1 style='color:red;text-align:center'>Lil Crab</h1>
+    <h2 style="color:yellow;text-align:left">OBJ</h2>
+
+
+    <script type="text/javascript" src="../utils/webgl-utils.js"></script>
+    <script type="text/javascript" src="../utils/initShaders.js"></script>
+    <script type="text/javascript" src="../utils/MV.js"></script>
+    <script type="text/javascript" src="../utils/OBJParser.js"></script>
+
+    <!-- Call canvas script -->
+    <script type="text/javascript" src="OBJViewer.js"></script>
+
+</head>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+    attribute vec4 vPosition;
+    attribute vec4 vColor;
+    attribute vec4 vNormal;
+
+    uniform mat4 modelViewMatrix;
+    uniform mat4 projectionMatrix;
+    uniform vec4 lightPosition;
+    varying vec4 fColor;
+
+    void main() {
+      vec3 light = (projectionMatrix * lightPosition).xyz;
+      gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+      vec3 normal = normalize(vec3(projectionMatrix * vNormal));
+      float nDotL = max(dot(normal, light), 0.0);
+      fColor = vec4(vColor.rgb * nDotL, vColor.a);
+    }
+    
+  </script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    varying vec4 fColor;
+
+    void main() {
+      gl_FragColor = fColor;
+    }
+  </script>
+
+
+<body style='background-color:black'>
+    <!-- Create canvas -->
+    <canvas id="c" width="512" height="512">
+        Please use a browser that supports "canvas"
+    </canvas>
+
+</body>
+
+</html>
